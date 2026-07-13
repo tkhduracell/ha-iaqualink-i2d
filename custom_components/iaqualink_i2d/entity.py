@@ -22,14 +22,19 @@ class IAqualinkI2DEntity(CoordinatorEntity[IAqualinkI2DCoordinator]):
         self._client = coordinator.client
         serial = self._client.serial or "unknown"
 
-        motordata = (coordinator.data or {}).get("motordata") or {}
+        data = coordinator.data or {}
+        motordata = data.get("motordata") or {}
         productid = motordata.get("productid")
-        model = f"iQPump {productid}" if productid else "iQPump01"
+        firmware = data.get("fwversion")
 
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, serial)},
             manufacturer="Jandy",
-            model=model,
+            model="iQPump01",
+            # Raw product code (e.g. "17") kept as a secondary identifier
+            # rather than shown as the model name.
+            model_id=str(productid) if productid else None,
+            sw_version=str(firmware) if firmware else None,
             name="Pool Pump",
             serial_number=serial,
         )
