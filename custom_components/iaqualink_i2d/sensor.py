@@ -14,11 +14,14 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
-    REVOLUTIONS_PER_MINUTE,
     UnitOfPower,
     UnitOfTemperature,
     UnitOfTime,
 )
+
+# HA's REVOLUTIONS_PER_MINUTE constant resolves to this string; use the literal
+# to avoid coupling to a const whose import path has changed across versions.
+UNIT_RPM = "rpm"
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -53,7 +56,7 @@ SENSORS: tuple[I2DSensorDescription, ...] = (
     I2DSensorDescription(
         key="motor_speed",
         translation_key="motor_speed",
-        native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
+        native_unit_of_measurement=UNIT_RPM,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:speedometer",
         value_fn=lambda d: _motordata(d, "speed"),
@@ -79,7 +82,7 @@ SENSORS: tuple[I2DSensorDescription, ...] = (
     I2DSensorDescription(
         key="rpm_target",
         translation_key="rpm_target",
-        native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
+        native_unit_of_measurement=UNIT_RPM,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:target",
         value_fn=lambda d: _to_int(d.get("rpmtarget")),
@@ -87,7 +90,7 @@ SENSORS: tuple[I2DSensorDescription, ...] = (
     I2DSensorDescription(
         key="custom_speed_rpm",
         translation_key="custom_speed_rpm",
-        native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
+        native_unit_of_measurement=UNIT_RPM,
         state_class=SensorStateClass.MEASUREMENT,
         icon="mdi:speedometer-medium",
         value_fn=lambda d: _to_int(d.get("customspeedrpm")),
