@@ -92,9 +92,9 @@ config/
 | Entity | Purpose |
 | --- | --- |
 | `number.*_pump_rpm` | Target RPM (raw). Setting it switches the pump to custom mode and runs at that speed for the selected duration. Requests are clamped to the pump's reported min/max RPM. |
-| `select.*_pump_mode` | Auto / Off. ("Custom" is set implicitly by the RPM number/service, which pick a speed explicitly — selecting custom directly would apply a stale RPM.) |
-| `select.*_custom_speed_duration` | Preferred run duration used by the RPM number + service. Held in memory; resets to the configured default on HA restart. |
-| `button.*_return_to_program` | Back to the normal schedule. |
+| `select.*_custom_speed_duration` | Preferred run duration used by the RPM number, the Start custom speed button, and the service. Held in memory; resets to the configured default on HA restart. |
+| `button.*_start_custom_speed` | Runs the pump at its current custom RPM for the selected duration. |
+| `button.*_return_to_program` | Back to the normal schedule. Only available while the pump is in custom mode. |
 | `sensor.*_motor_speed` / `_motor_power` / `_motor_temperature` | Live motor telemetry. |
 | `sensor.*_operating_mode`, `_target_rpm`, `_custom_speed_rpm`, `_custom_speed_timer` | State. |
 | `binary_sensor.*_priming` | On while priming. |

@@ -51,15 +51,6 @@ DURATION_OPTIONS: dict[str, int] = {
     "23 h 59": 86340,
 }
 
-# Mode select options mapped to opmode write values.
-# "custom" is intentionally NOT exposed here: switching to custom applies the
-# pump's last (stale) RPM with no confirmation. Use the RPM number entity or the
-# set_custom_speed service instead, which set the speed explicitly and safely.
-MODE_OPTIONS: dict[str, int] = {
-    "auto": OPMODE_AUTO,
-    "off": OPMODE_OFF,
-}
-
 # Services
 SERVICE_SET_CUSTOM_SPEED = "set_custom_speed"
 SERVICE_RETURN_TO_SCHEDULE = "return_to_schedule"

@@ -5,16 +5,9 @@ from __future__ import annotations
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .api import IAqualinkError
-from .const import (
-    DOMAIN,
-    DURATION_OPTIONS,
-    MODE_OPTIONS,
-    OPMODE_LABELS,
-)
+from .const import DOMAIN, DURATION_OPTIONS
 from .coordinator import IAqualinkI2DCoordinator
 from .entity import IAqualinkI2DEntity
 
@@ -26,51 +19,21 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the mode and duration selects."""
+    """Set up the custom-speed duration select."""
     coordinator: IAqualinkI2DCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities(
-        [PumpModeSelect(coordinator), CustomSpeedDurationSelect(coordinator)]
-    )
-
-
-class PumpModeSelect(IAqualinkI2DEntity, SelectEntity):
-    """Operating mode: auto / custom / off."""
-
-    _attr_translation_key = "pump_mode"
-    _attr_icon = "mdi:pump"
-    _attr_options = list(MODE_OPTIONS)
-
-    def __init__(self, coordinator: IAqualinkI2DCoordinator) -> None:
-        super().__init__(coordinator)
-        self._attr_unique_id = f"{self._client.serial}_mode"
-
-    @property
-    def current_option(self) -> str | None:
-        label = OPMODE_LABELS.get(str(self._data.get("opmode")))
-        return label if label in MODE_OPTIONS else None
-
-    async def async_select_option(self, option: str) -> None:
-        self._guard_writable("Set pump mode")
-        try:
-            # Switching to "custom" keeps the pump's last custom RPM; use the
-            # RPM number entity or the set_custom_speed service to change it.
-            await self._client.async_set_opmode(MODE_OPTIONS[option])
-        except IAqualinkError as err:
-            raise HomeAssistantError(f"Unable to set pump mode: {err}") from err
-        self.coordinator.enable_fast_refresh()
-        await self.coordinator.async_request_refresh()
+    async_add_entities([CustomSpeedDurationSelect(coordinator)])
 
 
 class CustomSpeedDurationSelect(IAqualinkI2DEntity, SelectEntity):
-    """Preferred run duration applied when setting a custom speed.
+    """Preferred run duration applied when setting/starting a custom speed.
 
     This is a local preference (not written to the device on its own); the RPM
-    number entity and the set_custom_speed service use it as the timer value.
+    number, the Start custom speed button, and the set_custom_speed service use
+    it as the timer value.
     """
 
     _attr_translation_key = "custom_speed_duration"
     _attr_icon = "mdi:timer-outline"
-    _attr_entity_category = None
     _attr_options = list(DURATION_OPTIONS)
 
     def __init__(self, coordinator: IAqualinkI2DCoordinator) -> None:
