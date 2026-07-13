@@ -25,6 +25,31 @@ variable speed pool pump, RPM control.
 > **Temperature note:** the iQPump01 only reports **motor winding temperature**, which the
 > controller already provides in °C. It does **not** expose pool-water temperature.
 
+## Compatibility
+
+This integration drives any pump the iAquaLink cloud reports as **`device_type=i2d`** —
+i.e. a **Jandy Pro Series iQPUMP01** control interface attached to a Jandy/Zodiac
+variable-speed pump. The iQPUMP01 is the box that adds iAquaLink app control to these
+pumps, so the pump model matters less than "is it behind an iQPUMP01?".
+
+**Check yours:** during setup the integration lists your account's devices and only offers
+`i2d` ones. In the iAquaLink app, an iQPUMP01-controlled pump shows up as its own pump tile.
+
+| Pump | Interface | Status |
+| --- | --- | --- |
+| Zodiac **FloPro VS** 1.65 HP | iQPUMP01 | ✅ **Verified** (developer's pump, `productid=17`) |
+| Jandy **VS FloPro** — 0.85 / 1.3 / 1.65 / 1.85 / 2.7 / 3.8 HP | iQPUMP01 | 🟢 Expected to work (same i2d interface) |
+| Zodiac **FloPro VS** — all HP variants (EU branding of VS FloPro) | iQPUMP01 | 🟢 Expected to work |
+| Jandy **ePump** (JEP-R) | built-in iAquaLink RS | ⚠️ Untested — may report a different `device_type` |
+| Any VS pump behind an **AquaLink RS / PDA** controller (no iQPUMP01) | AquaLink RS | ❌ Different system type — use the official `iaqualink` integration or [AqualinkD](https://github.com/sfeakes/AqualinkD) |
+
+RPM limits vary by model; the integration reads the controller's own `globalrpmmin` /
+`globalrpmmax` and adapts automatically, so no per-model configuration is needed.
+
+> Got a different iQPUMP01 pump working (or not)? Please
+> [open an issue](https://github.com/tkhduracell/ha-iaqualink-i2d/issues) with your model
+> and `productid` so this table can be expanded.
+
 ## Install via HACS (recommended)
 
 [HACS](https://hacs.xyz) (the Home Assistant Community Store) is the easiest way to
