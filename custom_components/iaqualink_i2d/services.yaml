@@ -1,0 +1,44 @@
+set_custom_speed:
+  name: Set custom speed
+  description: >-
+    Switch the pump to custom (manual) mode and run it at a target RPM for a
+    duration. RPM is rounded to the nearest 25.
+  target:
+    entity:
+      integration: iaqualink_i2d
+      domain: number
+  fields:
+    rpm:
+      name: RPM
+      description: Target motor speed in RPM.
+      required: true
+      example: 1800
+      selector:
+        number:
+          min: 600
+          max: 3450
+          step: 25
+          unit_of_measurement: RPM
+          mode: box
+    duration_seconds:
+      name: Duration (seconds)
+      description: >-
+        How long to hold the custom speed. Defaults to the duration select
+        value when omitted.
+      required: false
+      example: 3600
+      selector:
+        number:
+          min: 60
+          max: 86340
+          step: 60
+          unit_of_measurement: s
+          mode: box
+
+return_to_schedule:
+  name: Return to schedule
+  description: Return the pump to its normal schedule (Auto mode).
+  target:
+    entity:
+      integration: iaqualink_i2d
+      domain: number

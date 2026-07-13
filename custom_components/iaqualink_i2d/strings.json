@@ -1,0 +1,95 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "iAquaLink iQPump (i2d)",
+        "description": "Sign in with your iAquaLink account.",
+        "data": {
+          "username": "Email",
+          "password": "Password"
+        }
+      },
+      "select": {
+        "title": "Select pump",
+        "description": "Multiple iQPump controllers were found. Choose one.",
+        "data": {
+          "serial": "Pump"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate iAquaLink",
+        "description": "Your iAquaLink credentials are no longer valid. Sign in again.",
+        "data": {
+          "username": "Email",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid email or password.",
+      "cannot_connect": "Could not reach iAquaLink. Try again.",
+      "no_devices": "No iQPump (i2d) device was found in this account."
+    },
+    "abort": {
+      "already_configured": "This pump is already configured.",
+      "reauth_successful": "Reauthentication was successful."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "iQPump options",
+        "data": {
+          "default_duration_seconds": "Default custom-speed duration (seconds)",
+          "normal_interval": "Normal polling interval (seconds)",
+          "fast_interval": "Fast polling interval after a change (seconds)",
+          "fast_duration": "Fast polling window after a change (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "number": {
+      "pump_rpm": { "name": "Pump RPM" }
+    },
+    "select": {
+      "pump_mode": { "name": "Pump mode" },
+      "custom_speed_duration": { "name": "Custom speed duration" }
+    },
+    "sensor": {
+      "motor_speed": { "name": "Motor speed" },
+      "motor_power": { "name": "Motor power" },
+      "motor_temperature": { "name": "Motor temperature" },
+      "rpm_target": { "name": "Target RPM" },
+      "custom_speed_rpm": { "name": "Custom speed RPM" },
+      "custom_speed_timer": { "name": "Custom speed timer" },
+      "operating_mode": { "name": "Operating mode" }
+    },
+    "binary_sensor": {
+      "priming": { "name": "Priming" }
+    },
+    "button": {
+      "return_to_program": { "name": "Return to program" }
+    }
+  },
+  "services": {
+    "set_custom_speed": {
+      "name": "Set custom speed",
+      "description": "Switch the pump to custom mode and run at a target RPM for a duration.",
+      "fields": {
+        "rpm": {
+          "name": "RPM",
+          "description": "Target motor speed in RPM."
+        },
+        "duration_seconds": {
+          "name": "Duration (seconds)",
+          "description": "How long to hold the custom speed."
+        }
+      }
+    },
+    "return_to_schedule": {
+      "name": "Return to schedule",
+      "description": "Return the pump to its normal schedule (Auto mode)."
+    }
+  }
+}
