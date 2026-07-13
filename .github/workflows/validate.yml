@@ -23,3 +23,6 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
+          # Brands require the domain to be registered in home-assistant/brands
+          # (a separate PR). Not needed for a custom-repository install.
+          ignore: brands
