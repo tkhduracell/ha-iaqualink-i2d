@@ -54,7 +54,16 @@ class I2DSensorDescription(SensorEntityDescription):
 
 
 SENSORS: tuple[I2DSensorDescription, ...] = (
-    # Visible live readouts.
+    # Visible live readouts. Motor speed is the ACTUAL RPM (distinct from the
+    # fan's commanded speed), so it stays visible — including on area dashboards.
+    I2DSensorDescription(
+        key="motor_speed",
+        translation_key="motor_speed",
+        native_unit_of_measurement=UNIT_RPM,
+        state_class=SensorStateClass.MEASUREMENT,
+        icon="mdi:speedometer",
+        value_fn=lambda d: _motordata(d, "speed"),
+    ),
     I2DSensorDescription(
         key="motor_power",
         translation_key="motor_power",
@@ -73,17 +82,7 @@ SENSORS: tuple[I2DSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda d: _motordata(d, "temperature"),
     ),
-    # Diagnostics (collapsed on the device page). The fan entity is the primary
-    # speed control/readout; actual motor RPM lives here to avoid duplication.
-    I2DSensorDescription(
-        key="motor_speed",
-        translation_key="motor_speed",
-        native_unit_of_measurement=UNIT_RPM,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:speedometer",
-        entity_category=EntityCategory.DIAGNOSTIC,
-        value_fn=lambda d: _motordata(d, "speed"),
-    ),
+    # Diagnostics (collapsed on the device page).
     I2DSensorDescription(
         key="custom_speed_timer",
         translation_key="custom_speed_timer",
