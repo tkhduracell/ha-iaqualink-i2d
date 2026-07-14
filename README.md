@@ -91,13 +91,15 @@ config/
 
 | Entity | Purpose |
 | --- | --- |
-| `number.*_pump_rpm` | Target RPM (raw). Setting it switches the pump to custom mode and runs at that speed for the selected duration. Requests are clamped to the pump's reported min/max RPM. |
-| `select.*_custom_speed_duration` | Preferred run duration used by the RPM number, the Start custom speed button, and the service. Held in memory; resets to the configured default on HA restart. |
-| `button.*_start_custom_speed` | Runs the pump at its current custom RPM for the selected duration. |
-| `button.*_return_to_program` | Back to the normal schedule. Only available while the pump is in custom mode. |
-| `sensor.*_motor_speed` / `_motor_power` / `_motor_temperature` | Live motor telemetry. |
-| `sensor.*_operating_mode`, `_target_rpm`, `_custom_speed_rpm`, `_custom_speed_timer` | State. |
-| `binary_sensor.*_priming` | On while priming. |
+| `fan.*_pool_pump` | The pump. On/off, speed as a **percentage** (mapped to the device's min/max RPM in 25-RPM steps; exact RPMs are in the entity attributes), and a **`auto`** preset that hands control back to the pump's schedule. Setting a speed puts the pump in custom mode for the selected duration. |
+| `select.*_custom_speed_duration` | Run duration used when setting a custom speed. Held in memory; resets to the configured default on HA restart. |
+| `sensor.*_motor_power` / `_motor_temperature` | Live motor telemetry (°C for temperature). |
+| `sensor.*_motor_speed` | Actual motor RPM (diagnostic). |
+| `sensor.*_operating_mode`, `_custom_speed_timer` | State (diagnostic). |
+| `binary_sensor.*_priming` | On while priming (diagnostic). |
+
+Setting the fan speed switches the pump to custom mode and runs at that RPM for the
+`custom_speed_duration`; the `auto` preset returns it to the schedule.
 
 ## Services
 

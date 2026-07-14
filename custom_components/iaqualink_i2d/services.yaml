@@ -6,7 +6,7 @@ set_custom_speed:
   target:
     entity:
       integration: iaqualink_i2d
-      domain: number
+      domain: fan
   fields:
     rpm:
       name: RPM
@@ -41,4 +41,4 @@ return_to_schedule:
   target:
     entity:
       integration: iaqualink_i2d
-      domain: number
+      domain: fan

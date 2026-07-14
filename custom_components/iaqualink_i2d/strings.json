@@ -49,8 +49,8 @@
     }
   },
   "entity": {
-    "number": {
-      "pump_rpm": { "name": "Pump RPM" }
+    "fan": {
+      "pool_pump": { "name": "Pool pump" }
     },
     "select": {
       "custom_speed_duration": { "name": "Custom speed duration" }
@@ -59,17 +59,11 @@
       "motor_speed": { "name": "Motor speed" },
       "motor_power": { "name": "Motor power" },
       "motor_temperature": { "name": "Motor temperature" },
-      "rpm_target": { "name": "Target RPM" },
-      "custom_speed_rpm": { "name": "Custom speed RPM" },
       "custom_speed_timer": { "name": "Custom speed timer" },
       "operating_mode": { "name": "Operating mode" }
     },
     "binary_sensor": {
       "priming": { "name": "Priming" }
-    },
-    "button": {
-      "start_custom_speed": { "name": "Start custom speed" },
-      "return_to_program": { "name": "Return to program" }
     }
   },
   "services": {

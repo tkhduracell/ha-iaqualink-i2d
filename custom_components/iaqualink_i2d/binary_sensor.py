@@ -7,6 +7,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
 )
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -31,6 +32,7 @@ class PumpPrimingBinarySensor(IAqualinkI2DEntity, BinarySensorEntity):
     _attr_translation_key = "priming"
     _attr_device_class = BinarySensorDeviceClass.RUNNING
     _attr_icon = "mdi:water-pump"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator: IAqualinkI2DCoordinator) -> None:
         super().__init__(coordinator)

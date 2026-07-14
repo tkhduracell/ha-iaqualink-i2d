@@ -29,8 +29,7 @@ from .coordinator import IAqualinkI2DCoordinator
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
-    Platform.BUTTON,
-    Platform.NUMBER,
+    Platform.FAN,
     Platform.SELECT,
     Platform.SENSOR,
 ]

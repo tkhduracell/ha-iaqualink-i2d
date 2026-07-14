@@ -14,20 +14,21 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
+    EntityCategory,
     UnitOfPower,
     UnitOfTemperature,
     UnitOfTime,
 )
-
-# HA's REVOLUTIONS_PER_MINUTE constant resolves to this string; use the literal
-# to avoid coupling to a const whose import path has changed across versions.
-UNIT_RPM = "rpm"
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, OPMODE_LABELS
 from .coordinator import IAqualinkI2DCoordinator
 from .entity import IAqualinkI2DEntity
+
+# HA's REVOLUTIONS_PER_MINUTE constant resolves to this string; use the literal
+# to avoid coupling to a const whose import path has changed across versions.
+UNIT_RPM = "rpm"
 
 
 def _to_int(value: Any) -> int | None:
@@ -53,14 +54,7 @@ class I2DSensorDescription(SensorEntityDescription):
 
 
 SENSORS: tuple[I2DSensorDescription, ...] = (
-    I2DSensorDescription(
-        key="motor_speed",
-        translation_key="motor_speed",
-        native_unit_of_measurement=UNIT_RPM,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:speedometer",
-        value_fn=lambda d: _motordata(d, "speed"),
-    ),
+    # Visible live readouts.
     I2DSensorDescription(
         key="motor_power",
         translation_key="motor_power",
@@ -79,33 +73,30 @@ SENSORS: tuple[I2DSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_fn=lambda d: _motordata(d, "temperature"),
     ),
+    # Diagnostics (collapsed on the device page). The fan entity is the primary
+    # speed control/readout; actual motor RPM lives here to avoid duplication.
     I2DSensorDescription(
-        key="rpm_target",
-        translation_key="rpm_target",
+        key="motor_speed",
+        translation_key="motor_speed",
         native_unit_of_measurement=UNIT_RPM,
         state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:target",
-        value_fn=lambda d: _to_int(d.get("rpmtarget")),
-    ),
-    I2DSensorDescription(
-        key="custom_speed_rpm",
-        translation_key="custom_speed_rpm",
-        native_unit_of_measurement=UNIT_RPM,
-        state_class=SensorStateClass.MEASUREMENT,
-        icon="mdi:speedometer-medium",
-        value_fn=lambda d: _to_int(d.get("customspeedrpm")),
+        icon="mdi:speedometer",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda d: _motordata(d, "speed"),
     ),
     I2DSensorDescription(
         key="custom_speed_timer",
         translation_key="custom_speed_timer",
         native_unit_of_measurement=UnitOfTime.SECONDS,
         icon="mdi:timer-sand",
+        entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda d: _to_int(d.get("customspeedtimer")),
     ),
     I2DSensorDescription(
         key="operating_mode",
         translation_key="operating_mode",
         icon="mdi:pump",
+        entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=_opmode_label,
     ),
 )
